@@ -230,17 +230,29 @@ camelcaseKeys(commandLineArguments);
 //=> {_: [], fooBar: true}
 ```
 */
-export default function camelcaseKeys<
-	T extends Record<string, unknown> | ReadonlyArray<Record<string, unknown>>,
+type Input = Record<string, unknown> | ReadonlyArray<Record<string, unknown>>;
+
+type CamelCaseKeysWithOptions<T extends Input> = CamelCaseKeys<
+	T,
+	WithDefault<'deep' extends keyof OptionsType ? OptionsType['deep'] : undefined, false>,
+	WithDefault<'pascalCase' extends keyof OptionsType ? OptionsType['pascalCase'] : undefined, false>,
+	WithDefault<'preserveConsecutiveUppercase' extends keyof OptionsType ? OptionsType['preserveConsecutiveUppercase'] : undefined, false>,
+	WithDefault<'exclude' extends keyof OptionsType ? OptionsType['exclude'] : undefined, EmptyTuple>,
+	WithDefault<'stopPaths' extends keyof OptionsType ? OptionsType['stopPaths'] : undefined, EmptyTuple>
+>
+
+export function camelcaseKeys<
+	T extends Input,
 	OptionsType extends Options = Options,
 >(
 	input: T,
 	options?: OptionsType
-): CamelCaseKeys<
-T,
-WithDefault<'deep' extends keyof OptionsType ? OptionsType['deep'] : undefined, false>,
-WithDefault<'pascalCase' extends keyof OptionsType ? OptionsType['pascalCase'] : undefined, false>,
-WithDefault<'preserveConsecutiveUppercase' extends keyof OptionsType ? OptionsType['preserveConsecutiveUppercase'] : undefined, false>,
-WithDefault<'exclude' extends keyof OptionsType ? OptionsType['exclude'] : undefined, EmptyTuple>,
-WithDefault<'stopPaths' extends keyof OptionsType ? OptionsType['stopPaths'] : undefined, EmptyTuple>
->;
+): CamelCaseKeysWithOptions<T>;
+
+export default function camelcaseKeys<
+	T extends Input,
+	OptionsType extends Options = Options,
+>(
+	input: T,
+	options?: OptionsType
+): CamelCaseKeysWithOptions<T>;

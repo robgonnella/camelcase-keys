@@ -68,10 +68,12 @@ const transform = (input, options = {}) => {
 	return mapObject(input, makeMapper(undefined));
 };
 
-export default function camelcaseKeys(input, options) {
+export const camelcaseKeys = (input, options) => {
 	if (Array.isArray(input)) {
-		return Object.keys(input).map(key => transform(input[key], options));
+		return Object.keys(input).map((key) => transform(input[key], options));
 	}
 
 	return transform(input, options);
-}
+};
+
+export default camelcaseKeys;
